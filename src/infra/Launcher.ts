@@ -12,13 +12,14 @@ const project_metadata : ProjectMetadata = {
     squad: "devops"
 }
 
-new DataStack(app, stackNamingHook(project_metadata,"data"), {
+const dataStack = new DataStack(app, stackNamingHook(project_metadata,"data"), {
     metadata : project_metadata,
 })
 const lambdaStack = new LambdaStack(app, stackNamingHook(project_metadata,"lambda"), {
     stackSlug: "lambda-stack",
     functionSlug: "",
-    metadata: project_metadata
+    metadata: project_metadata,
+    spacesTable : dataStack.spacesTable
 })
 
 new GatewayStack(app,stackNamingHook(project_metadata,"rest-api"), {
