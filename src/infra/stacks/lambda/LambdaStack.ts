@@ -1,13 +1,17 @@
 import * as cdk from 'aws-cdk-lib'
 import { Construct } from 'constructs';
-import { Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import path = require('path');
 import { ProjectMetadata } from '../../../global/Global';
 import { LambdaIntegration } from 'aws-cdk-lib/aws-apigateway';
+import { ITable } from 'aws-cdk-lib/aws-dynamodb';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 interface LambdaStackProps extends cdk.StackProps{
     //TODO
     stackSlug : string
+    spacesTable : ITable
     functionSlug : string
     metadata : ProjectMetadata
 }
@@ -20,12 +24,24 @@ export class LambdaStack extends cdk.Stack {
         super(scope, id, props)
         this.initialize()
 
-        const hello = new LambdaFunction(this, "HelloLambda", {
+        const hello = new NodejsFunction(this, "HelloLambda", {
             functionName: `lf-${props.metadata.name}-${this.functionSlug}`,
             runtime: Runtime.NODEJS_22_X,
-            handler: 'hello.main',
-            code: Code.fromAsset(path.join(__dirname, '..', '..', '..', 'services'))
+            handler: 'handler',
+            entry: path.join(__dirname, '..', '..', '..', 'services', 'hello.ts'),
+            environment : {
+                TABLE_NAME : props.spacesTable.tableName!
+            }
         })
+
+        hello.addToRolePolicy(new PolicyStatement({
+            effect: Effect.ALLOW,
+            actions: [
+                's3:ListAllMyBuckets',
+                's3:ListBucket'
+            ],
+            resources: ["*"]
+        }))
 
         this.helloIntegration = new LambdaIntegration(hello)
     }
