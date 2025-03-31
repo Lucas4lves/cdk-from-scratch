@@ -1,9 +1,10 @@
 import * as cdk from 'aws-cdk-lib'
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
+import { ProjectMetadata } from '../../../global/Global';
 
 interface GatewayStackProps extends cdk.StackProps {
-    helloLambdaIntegration : LambdaIntegration
+    helloLambdaIntegration : LambdaIntegration 
 }
 
 export class GatewayStack extends cdk.Stack{
