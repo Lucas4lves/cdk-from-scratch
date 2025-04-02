@@ -33,8 +33,9 @@ export class LambdaStack extends cdk.Stack {
                 TABLE_NAME : props.spacesTable.tableName!
             }
         })
-
+        
         spacesLambda.addToRolePolicy(new PolicyStatement({
+
             effect: Effect.ALLOW,
             actions: [
                 's3:ListAllMyBuckets',
@@ -42,7 +43,6 @@ export class LambdaStack extends cdk.Stack {
             ],
             resources: ["*"]
         }))
-
         this.spacesIntegration = new LambdaIntegration(spacesLambda)
     }
     private initialize(){
