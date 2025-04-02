@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Locally",
+        "runtimeArgs": [
+            "-r",
+            "ts-node/register"
+        ],
+        "args": [
+            "${relativeFile}"
+        ],
+        "env": {
+            "AWS_REGION": "us-east-1"
+        }
+    }],
+    "compounds": []
+}
