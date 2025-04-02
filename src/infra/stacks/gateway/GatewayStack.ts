@@ -4,7 +4,7 @@ import { Construct } from 'constructs';
 import { ProjectMetadata } from '../../../global/Global';
 
 interface GatewayStackProps extends cdk.StackProps {
-    helloLambdaIntegration : LambdaIntegration 
+    spacesIntegration : LambdaIntegration 
 }
 
 export class GatewayStack extends cdk.Stack{
@@ -14,7 +14,8 @@ export class GatewayStack extends cdk.Stack{
         const api = new RestApi(this, 'restApi')
         const baseResource = api.root.addResource('spaces')
 
-        baseResource.addMethod('GET', props.helloLambdaIntegration)
+        baseResource.addMethod('GET', props.spacesIntegration)
+        baseResource.addMethod('POST', props.spacesIntegration)
 
     }
 }

@@ -15,6 +15,7 @@
     "aws-cdk": "^2.1006.0",
     "aws-cdk-lib": "^2.185.0",
     "esbuild": "^0.25.2",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.3"
   },
   "dependencies": {

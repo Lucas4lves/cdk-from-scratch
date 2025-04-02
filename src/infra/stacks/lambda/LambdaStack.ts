@@ -18,23 +18,24 @@ interface LambdaStackProps extends cdk.StackProps{
 
 export class LambdaStack extends cdk.Stack {
     private functionSlug : string
-    public readonly helloIntegration : LambdaIntegration
+    public readonly spacesIntegration : LambdaIntegration
 
     constructor(scope : Construct, id : string, props? : LambdaStackProps){
         super(scope, id, props)
         this.initialize()
 
-        const hello = new NodejsFunction(this, "HelloLambda", {
+        const spacesLambda = new NodejsFunction(this, "SpacesLambda", {
             functionName: `lf-${props.metadata.name}-${this.functionSlug}`,
             runtime: Runtime.NODEJS_22_X,
             handler: 'handler',
-            entry: path.join(__dirname, '..', '..', '..', 'services', 'hello.ts'),
+            entry: path.join(__dirname, '..', '..', '..', 'services', 'spaces','handler.ts'),
             environment : {
                 TABLE_NAME : props.spacesTable.tableName!
             }
         })
+        
+        spacesLambda.addToRolePolicy(new PolicyStatement({
 
-        hello.addToRolePolicy(new PolicyStatement({
             effect: Effect.ALLOW,
             actions: [
                 's3:ListAllMyBuckets',
@@ -42,8 +43,7 @@ export class LambdaStack extends cdk.Stack {
             ],
             resources: ["*"]
         }))
-
-        this.helloIntegration = new LambdaIntegration(hello)
+        this.spacesIntegration = new LambdaIntegration(spacesLambda)
     }
     private initialize(){
         this.functionSlug = cdk.Fn.select(4, cdk.Fn.split('-', this.stackId))

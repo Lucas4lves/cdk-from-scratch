@@ -23,5 +23,5 @@ const lambdaStack = new LambdaStack(app, stackNamingHook(project_metadata,"lambd
 })
 
 new GatewayStack(app,stackNamingHook(project_metadata,"rest-api"), {
-    helloLambdaIntegration: lambdaStack.helloIntegration
+    spacesIntegration: lambdaStack.spacesIntegration
 })
